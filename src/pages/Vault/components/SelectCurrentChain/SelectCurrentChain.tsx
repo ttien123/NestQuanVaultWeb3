@@ -15,12 +15,18 @@ import { changeChainId } from 'src/services/walletServices/walletServices';
 import { RootState } from 'src/store';
 
 const SelectCurrentChain = () => {
+    const disPatch = useDispatch();
     const navigate = useNavigate();
     const address = useSelector((state: RootState) => state.Authentication.address);
     const currentChain = useSelector((state: RootState) => state.Authentication.currentChain);
-    const { handleConnect } = useConnectWallet({});
+    // const { handleConnect } = useConnectWallet({});
 
-    const { content: contentData, stepEarly: stepData, resetModalStep: rest } = useVaultList(currentChain);
+    const {
+        getVaultList,
+        content: contentData,
+        stepEarly: stepData,
+        resetModalStep: rest,
+    } = useVaultList(currentChain);
 
     const [content, setContent] = useState('');
     const [step, setStep] = useState(MODAL_STEP.READY);
@@ -58,34 +64,36 @@ const SelectCurrentChain = () => {
                             },
                         )}
                         onClick={async () => {
-                            handleStatus('Please confirm the request...', MODAL_STEP.PROCESSING);
-                            if (address) {
-                                const isChangeChain = await changeChainId(e.value);
-                                isChangeChain &&
-                                    toast.success('Success', {
-                                        autoClose: 1000,
-                                    });
+                            disPatch(handleSetChain(e.value));
+                            getVaultList(e.value);
+                            // handleStatus('Please confirm the request...', MODAL_STEP.PROCESSING);
+                            // if (address) {
+                            //     const isChangeChain = await changeChainId(e.value);
+                            //     isChangeChain &&
+                            //         toast.success('Success', {
+                            //             autoClose: 1000,
+                            //         });
 
-                                !isChangeChain &&
-                                    toast.error('Fail', {
-                                        autoClose: 1000,
-                                    });
-                            } else {
-                                const isConnected = await handleConnect();
-                                if (isConnected) {
-                                    const isChangeChain = await changeChainId(e.value);
-                                    isChangeChain &&
-                                        toast.success('Success', {
-                                            autoClose: 1000,
-                                        });
+                            //     !isChangeChain &&
+                            //         toast.error('Fail', {
+                            //             autoClose: 1000,
+                            //         });
+                            // } else {
+                            //     const isConnected = await handleConnect();
+                            //     if (isConnected) {
+                            //         const isChangeChain = await changeChainId(e.value);
+                            //         isChangeChain &&
+                            //             toast.success('Success', {
+                            //                 autoClose: 1000,
+                            //             });
 
-                                    !isChangeChain &&
-                                        toast.error('Fail', {
-                                            autoClose: 1000,
-                                        });
-                                }
-                            }
-                            handleStatus('Retrieving data onchain...', MODAL_STEP.READY);
+                            //         !isChangeChain &&
+                            //             toast.error('Fail', {
+                            //                 autoClose: 1000,
+                            //             });
+                            //     }
+                            // }
+                            // handleStatus('Retrieving data onchain...', MODAL_STEP.READY);
                             // handleSetChain(e.value);
                             // getVaultList(e.value);
                             // console.log(`current Chain: ${currentChain}`);

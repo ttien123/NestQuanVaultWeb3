@@ -4,24 +4,33 @@ import useScrollTop from 'src/hooks/useScrollTop';
 import SearchTable from './components/SearchTable';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store';
-import ModalStep from 'src/components/ModalStep';
-import { useVaultList } from 'src/hooks/vault/useVaultList';
-import { MODAL_STEP } from 'src/components/ModalStep/ModalStep';
 import { useState } from 'react';
-import { SorterResult } from 'antd/es/table/interface';
+import SearchContainer from './components/SearchContainer';
 
 const Vault = () => {
-    const [sort, setSort] = useState<SorterResult<any>>({});
-
     useScrollTop();
+    const [searchVault, setSearchVault] = useState<string>('');
     const listVaults = useSelector((state: RootState) => state.vaultStore.listVault);
+    console.log(searchVault);
+
+    const data = {
+        // total: listVaults.length || 0,
+        dataSource: listVaults.filter((e) =>
+            e.vault.name.toLocaleLowerCase().includes(searchVault?.toLocaleLowerCase() || ''),
+        ),
+        // isLoading: loading,
+    };
+
+    const { dataSource } = data;
 
     return (
         <div className="h-[5000px] py-[40px] px-4 md:px-6 lg:px-8 pt-0">
             <HeaderVault />
             <main className="mt-12">
-                <SearchBar />
-                <SearchTable dataSource={listVaults} sort={sort} />
+                <SearchContainer searchVault={searchVault} setSearchVault={setSearchVault}>
+                    <SearchBar />
+                    <SearchTable dataSource={dataSource} />
+                </SearchContainer>
             </main>
         </div>
     );

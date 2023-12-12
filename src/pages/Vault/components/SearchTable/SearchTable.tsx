@@ -2,22 +2,20 @@ import { Empty, Table } from 'antd';
 import type { ColumnsType, ColumnGroupType } from 'antd/es/table';
 import BigNumber from 'bignumber.js';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import IconTooltip from 'src/assets/svg/IconTooltip';
 import NoData from 'src/assets/svg/NoData';
 import { VaultDetailDTO, VaultKey } from 'src/types/vault/vaultDetail.type';
 import { formatCurrency, getUnitValue, isValidStringNumber } from 'src/utils';
-import type { SorterResult } from 'antd/lib/table/interface';
 import { SortOrder } from 'antd/es/table/interface';
 
 interface Props {
     dataSource?: VaultDetailDTO[];
-    sort?: SorterResult<VaultDetailDTO>;
 }
 
-const SearchTable = ({ dataSource, sort }: Props) => {
+const SearchTable = ({ dataSource }: Props) => {
     let unitValue = '';
-
+    const navigate = useNavigate();
     const columns: ColumnsType<VaultDetailDTO> = useMemo(
         () =>
             [
@@ -33,7 +31,7 @@ const SearchTable = ({ dataSource, sort }: Props) => {
                         const { address = '', vault } = record || {};
                         unitValue = getUnitValue(vault.name);
                         return (
-                            <Link to={`vault/${address}`} className="flex items-center">
+                            <div className="flex items-center">
                                 <div className="flex items-start w-[36px]">
                                     <img src={vault.img} alt="img1" className="w-[24px] h-[24px]" />
                                     {/* <Image src={vault.img} preview={false} alt='img1' className='img1' width={24} height={24} /> */}
@@ -42,7 +40,7 @@ const SearchTable = ({ dataSource, sort }: Props) => {
                       )} */}
                                 </div>
                                 <div className="name">{vault.name.split('/')[0]}</div>
-                            </Link>
+                            </div>
                         );
                     },
                 },
@@ -113,7 +111,7 @@ const SearchTable = ({ dataSource, sort }: Props) => {
                     <div
                         className="cursor-pointer"
                         onClick={() => {
-                            // navigate(`vault/${record.address}`);
+                            navigate(`vault/${record.address}`);
                         }}
                     >
                         {render(value, record)}
