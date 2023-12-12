@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.ant-modal .ant-modal-content {
+    border-radius: 16px !important;
+    background: #181f38;
+    padding: 24px !important;
+}
+
+.ant-radio-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.ant-radio-button-wrapper:not(:first-child)::before {
+    display: none;
+}
+
+.ant-radio-button-wrapper:first-child {
+    border-inline-start: none;
+    border-start-start-radius: 12px;
+    border-end-start-radius: 12px;
+}
+.ant-radio-button-wrapper:last-child {
+    border-start-end-radius: 12px;
+    border-end-end-radius: 12px;
+    margin-left: 8px;
+    pointer-events: none;
+}
+
+.ant-radio-button-wrapper {
+    font-family: 'Montserrat', sans-serif;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    border: none;
+    padding: 0px 12px;
+    outline: none;
+    box-shadow: none;
+    white-space: nowrap;
+    color: #9da7ba;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 150%;
+    position: relative !important;
+}
+
+.ant-radio-button-wrapper-checked {
+    background: linear-gradient(96.06deg, rgb(82, 106, 234) 4.1%, rgb(176, 174, 255) 146.32%) blue !important;
+    color: #fff !important;
+}
+
+.ant-radio-button-wrapper:nth-last-child(2)::after {
+    content: '';
+    position: absolute;
+    display: block;
+    left: 120%;
+    background: #313c65;
+    width: 1px;
+    height: 100%;
+}
+
+/* modal Step  */
+
+.modal-processing svg path:nth-child(1),
+.modal-processing svg path:nth-child(13) {
+    --nth-child: 6;
+}
+
+.modal-processing svg path:nth-child(2),
+.modal-processing svg path:nth-child(14) {
+    --nth-child: 5;
+}
+
+.modal-processing svg path:nth-child(3),
+.modal-processing svg path:nth-child(15) {
+    --nth-child: 4;
+}
+
+.modal-processing svg path:nth-child(4),
+.modal-processing svg path:nth-child(16) {
+    --nth-child: 3;
+}
+
+.modal-processing svg path:nth-child(5),
+.modal-processing svg path:nth-child(17) {
+    --nth-child: 2;
+}
+
+.modal-processing svg path:nth-child(6),
+.modal-processing svg path:nth-child(18) {
+    --nth-child: 8;
+}
+
+.modal-processing svg path:nth-child(7),
+.modal-processing svg path:nth-child(19) {
+    --nth-child: 7;
+}
+
+.modal-processing svg path:nth-child(8),
+.modal-processing svg path:nth-child(20) {
+    --nth-child: 1;
+}
+
+.modal-processing svg path:nth-child(9),
+.modal-processing svg path:nth-child(21) {
+    --nth-child: 9;
+}
+
+.modal-processing svg path:nth-child(10),
+.modal-processing svg path:nth-child(22) {
+    --nth-child: 10;
+}
+
+.modal-processing svg path:nth-child(11),
+.modal-processing svg path:nth-child(23) {
+    --nth-child: 11;
+}
+
+.modal-processing svg path:nth-child(12),
+.modal-processing svg path:nth-child(24) {
+    --nth-child: 12;
+}
+
+.modal-processing svg path:nth-child(n) {
+    animation: fadein 1.2s linear infinite;
+    animation-delay: calc(0.1s * var(--nth-child));
+}
+@keyframes fadein {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
