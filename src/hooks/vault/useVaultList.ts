@@ -25,8 +25,6 @@ export const useVaultList = (currentChain: ChainType) => {
         const curChainId = chainId || currentChain;
         const { listVault, detailVault } = await handleRetrieveEarly(curChainId, account, vaultId, vaultDetail);
         disPatch(handleSetListVault(listVault));
-        console.log(listVault);
-
         // handleSetListVault({ listVault: listVault });
         // const mockVaultDetail = detailVault != null ? detailVault : listVault[0];
         // handleSetVaultDetail({ detailVault: mockVaultDetail });
