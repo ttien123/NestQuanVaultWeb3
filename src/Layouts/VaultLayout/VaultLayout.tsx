@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import logoName from 'src/assets/svg/logoName.svg';
 import path from 'src/constants/path';
+import HeaderVault from 'src/pages/Vault/components/HeaderVault';
 import NavVault from 'src/pages/Vault/components/NavVault';
 
 interface Props {
@@ -23,7 +24,7 @@ const VaultLayout = ({ children }: Props) => {
                         <NavVault />
                     </div>
                 </div>
-                <div className="lg:ml-[310px] min-h-[100vh]">{children}</div>
+                <div className="lg:ml-[310px] min-h-[100vh] py-[40px] px-4 md:px-6 lg:px-8 pt-0">{children}</div>
                 {/* <div className="absolute z-[-1] origin-top-left top-[-800px] right-[-700px] w-[1104px] h-[1412px] rounded-[1412px] bg-vaultBgTop"></div>
                 <div className="absolute z-[-1] origin-top-left top-[60px] left-[-600px] w-[1558px] h-[1851px] rounded-[1412px] bg-vaultBgBottom"></div> */}
             </div>
