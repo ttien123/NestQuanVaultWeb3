@@ -8,12 +8,16 @@ import NoData from 'src/assets/svg/NoData';
 import { VaultDetailDTO, VaultKey } from 'src/types/vault/vaultDetail.type';
 import { formatCurrency, getUnitValue, isValidStringNumber } from 'src/utils';
 import { SortOrder } from 'antd/es/table/interface';
+import path from 'src/constants/path';
+import { useDispatch } from 'react-redux';
+import { handleSetVaultDetail } from 'src/ReducerStore/useVaultStore/useVaultStore';
 
 interface Props {
     dataSource?: VaultDetailDTO[];
 }
 
 const SearchTable = ({ dataSource }: Props) => {
+    const disPatch = useDispatch();
     let unitValue = '';
     const navigate = useNavigate();
     const columns: ColumnsType<VaultDetailDTO> = useMemo(
@@ -111,7 +115,8 @@ const SearchTable = ({ dataSource }: Props) => {
                     <div
                         className="cursor-pointer"
                         onClick={() => {
-                            navigate(`vault/${record.address}`);
+                            navigate(`${path.vault}/${record.address}`);
+                            disPatch(handleSetVaultDetail(record));
                         }}
                     >
                         {render(value, record)}
@@ -121,17 +126,19 @@ const SearchTable = ({ dataSource }: Props) => {
         [],
     );
     return (
-        <Table
-            dataSource={dataSource}
-            showSorterTooltip={false}
-            columns={columns}
-            pagination={false}
-            rowKey={(record) => record.id}
-            scroll={{ x: 1300 }}
-            tableLayout="fixed"
-            sortDirections={['ascend', 'descend', 'ascend']}
-            locale={{ emptyText: <Empty image={<NoData />} description={'noData'} /> }}
-        />
+        <div className="">
+            <Table
+                dataSource={dataSource}
+                showSorterTooltip={false}
+                columns={columns}
+                pagination={false}
+                rowKey={(record) => record.id}
+                scroll={{ x: 1300 }}
+                tableLayout="fixed"
+                sortDirections={['ascend', 'descend', 'ascend']}
+                locale={{ emptyText: <Empty image={<NoData />} description={'noData'} /> }}
+            />
+        </div>
     );
 };
 

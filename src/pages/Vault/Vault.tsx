@@ -11,8 +11,6 @@ const Vault = () => {
     useScrollTop();
     const [searchVault, setSearchVault] = useState<string>('');
     const listVaults = useSelector((state: RootState) => state.vaultStore.listVault);
-    console.log(searchVault);
-
     const data = {
         // total: listVaults.length || 0,
         dataSource: listVaults.filter((e) =>
@@ -24,7 +22,7 @@ const Vault = () => {
     const { dataSource } = data;
 
     return (
-        <div className="h-[5000px] py-[40px] px-4 md:px-6 lg:px-8 pt-0">
+        <div className="py-[40px] px-4 md:px-6 lg:px-8 pt-0">
             <HeaderVault />
             <main className="mt-12">
                 <SearchContainer searchVault={searchVault} setSearchVault={setSearchVault}>

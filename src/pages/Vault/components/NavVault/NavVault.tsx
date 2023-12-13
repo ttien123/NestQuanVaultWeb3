@@ -5,12 +5,21 @@ import HomeIcon from 'src/assets/svg/HomeIcon';
 import path from 'src/constants/path';
 import { motion, Variants } from 'framer-motion';
 import ConnectWallet from '../ConnectWallet';
+import ConnectButton from 'src/components/ConnectButton';
+import { useConnectWallet } from 'src/hooks/connectWallet/useConnectWallet';
+import { useModal } from 'src/hooks/useModal';
+import ConnectedWallet from '../ConnectedWallet';
 
 interface Props {
     isResponsive?: boolean;
+    currentAddress?: string;
+    handleLogout?: () => void;
+    onOpenModalSelect?: () => void;
 }
 
-const NavVault = ({ isResponsive }: Props) => {
+const NavVault = ({ isResponsive, currentAddress, handleLogout, onOpenModalSelect }: Props) => {
+    // const { open: openSelect, onCloseModal: onCloseSelectModal, onOpenModal: onOpenModalSelect } = useModal();
+
     const listVariants: Variants = {
         open: {
             opacity: 1,
@@ -61,11 +70,32 @@ const NavVault = ({ isResponsive }: Props) => {
                 }}
                 className={`${
                     isResponsive
-                        ? 'border border-[#29384e] backdrop-blur-[8px] px-0 py-4 lg:p-8 bg-bgMenuVault'
+                        ? 'border border-[#29384e] backdrop-blur-[8px] p-6 lg:px-0 lg:py-4 lg:p-8 bg-bgMenuVault'
                         : '#181F38'
                 }`}
             >
-                {isResponsive && <ConnectWallet isResponsive />}
+                {/* {isResponsive && <ConnectWallet isResponsive />} */}
+                {isResponsive &&
+                    (!currentAddress ? (
+                        <div className="ml-4">
+                            <ConnectButton
+                                onClick={() => {
+                                    onOpenModalSelect && onOpenModalSelect();
+                                }}
+                                isResponsive={isResponsive}
+                            >
+                                Connect Wallet
+                            </ConnectButton>
+                        </div>
+                    ) : (
+                        <ConnectedWallet
+                            onClick={() => {
+                                handleLogout && handleLogout();
+                            }}
+                            extendsClassName={`${isResponsive ? '' : 'hidden lg:block'}`}
+                            isResponsive={isResponsive}
+                        />
+                    ))}
                 {menuList.map((item) => {
                     return (
                         <motion.li

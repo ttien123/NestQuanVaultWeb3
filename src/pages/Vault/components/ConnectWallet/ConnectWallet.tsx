@@ -71,7 +71,17 @@ const ConnectWallet = ({ isResponsive }: Props) => {
             >
                 <SelectCurrentChain />
             </div>
-            <Popover isNavVault renderPopover={<NavVault isResponsive />}>
+            <Popover
+                isNavVault
+                renderPopover={
+                    <NavVault
+                        isResponsive
+                        currentAddress={currentAddress}
+                        handleLogout={handleLogout}
+                        onOpenModalSelect={onOpenModalSelect}
+                    />
+                }
+            >
                 <button
                     className={`${
                         isResponsive && 'hidden'

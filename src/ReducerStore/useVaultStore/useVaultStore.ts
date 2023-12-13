@@ -30,10 +30,13 @@ export const vaultStoreSlice = createSlice({
         handleSetListVault: (state, action: PayloadAction<VaultDetailDTO[]>) => {
             state.listVault = action.payload;
         },
+        handleSetVaultDetail: (state, action: PayloadAction<VaultDetailDTO>) => {
+            state.detailVault = action.payload;
+        },
     },
 });
 
-export const { handleSetListVault } = vaultStoreSlice.actions;
+export const { handleSetListVault, handleSetVaultDetail } = vaultStoreSlice.actions;
 const vaultStoreReducer = vaultStoreSlice.reducer;
 
 export default vaultStoreReducer;

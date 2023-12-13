@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import DataPage from './pages/DataPage';
 import VaultLayout from './Layouts/VaultLayout';
 import Vault from './pages/Vault';
+import VaultDetail from './pages/VaultDetail';
 
 const useRouterElements = () => {
     const routeElements = useRoutes([
@@ -30,6 +31,14 @@ const useRouterElements = () => {
             element: (
                 <VaultLayout>
                     <Vault />
+                </VaultLayout>
+            ),
+        },
+        {
+            path: path.vaultDetail,
+            element: (
+                <VaultLayout>
+                    <VaultDetail />
                 </VaultLayout>
             ),
         },
