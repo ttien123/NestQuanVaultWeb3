@@ -1,7 +1,7 @@
 const path = {
     home: '/',
     vault: '/vault',
-    vaultDetail: '/vault/:address',
+    vaultDetail: '/vault/:vaultId',
     dataPage: '/dataPage',
     docs: 'https://vault-docs.nestquant.com/',
 } as const;

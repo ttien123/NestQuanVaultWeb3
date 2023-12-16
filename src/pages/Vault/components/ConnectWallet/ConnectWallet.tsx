@@ -12,7 +12,7 @@ import PhantomIcon from 'src/assets/svg/ListWalletIcon/PhantomIcon';
 import KeplrIcon from 'src/assets/svg/ListWalletIcon/KeplrIcon';
 import LedgeIcon from 'src/assets/svg/ListWalletIcon/LedgeIcon';
 import ModalStep, { MODAL_STEP } from 'src/components/ModalStep/ModalStep';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useConnectWallet } from 'src/hooks/connectWallet/useConnectWallet';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store';
@@ -100,7 +100,7 @@ const ConnectWallet = ({ isResponsive }: Props) => {
                 </button>
             </Popover>
             {!currentAddress ? (
-                <ConnectButton onClick={onOpenModalSelect} isResponsive={isResponsive}>
+                <ConnectButton onClick={handleConnect} isResponsive={isResponsive}>
                     Connect Wallet
                 </ConnectButton>
             ) : (

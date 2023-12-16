@@ -23,7 +23,6 @@ const Vault = () => {
 
     return (
         <div>
-            <HeaderVault />
             <div className="mt-12">
                 <SearchContainer searchVault={searchVault} setSearchVault={setSearchVault}>
                     <SearchBar />

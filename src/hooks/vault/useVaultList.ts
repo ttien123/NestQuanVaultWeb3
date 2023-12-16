@@ -5,11 +5,12 @@ import { RootState } from 'src/store';
 import { VaultDetailDTO } from 'src/types/vault/vaultDetail.type';
 import { ChainType } from 'src/ReducerStore/useAuthenticationStore/useAuthenticationStore';
 import useFetchVaultTable from './useFetchVaultTable';
-import { handleSetListVault } from 'src/ReducerStore/useVaultStore/useVaultStore';
+import { handleSetListVault, handleSetVaultDetail } from 'src/ReducerStore/useVaultStore/useVaultStore';
 // const typechain = require('nestquant-vault-eth-sdk');
 
 export const useVaultList = (currentChain: ChainType) => {
     const disPatch = useDispatch();
+    const [firstRender, setFirstRender] = useState(true);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<{ data: VaultDetailDTO[]; network: ChainType }>({
         data: [],
@@ -25,6 +26,7 @@ export const useVaultList = (currentChain: ChainType) => {
         const curChainId = chainId || currentChain;
         const { listVault, detailVault } = await handleRetrieveEarly(curChainId, account, vaultId, vaultDetail);
         disPatch(handleSetListVault(listVault));
+        disPatch(handleSetVaultDetail(detailVault));
         // handleSetListVault({ listVault: listVault });
         // const mockVaultDetail = detailVault != null ? detailVault : listVault[0];
         // handleSetVaultDetail({ detailVault: mockVaultDetail });
@@ -35,14 +37,17 @@ export const useVaultList = (currentChain: ChainType) => {
     };
 
     useEffect(() => {
-        setLoading(true);
+        if (firstRender || typeof vaultId !== 'undefined') {
+            setLoading(true);
 
-        const fetch = (async () => {
-            const { listVault: data, curChainId: network } = await getVaultList();
-            setData({ data, network });
-            setLoading(false);
-        })();
-    }, []); // currentChain
+            const fetch = (async () => {
+                const { listVault: data, curChainId: network } = await getVaultList();
+                setData({ data, network });
+                setLoading(false);
+            })();
+        }
+        setFirstRender(false);
+    }, [vaultId, firstRender]); // currentChain
 
     return {
         getVaultList,

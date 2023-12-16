@@ -113,7 +113,7 @@ const SearchTable = ({ dataSource }: Props) => {
                 key: dataIndex,
                 render: (value: any, record: VaultDetailDTO) => (
                     <div
-                        className="cursor-pointer"
+                        className="cursor-pointer py-[10px]"
                         onClick={() => {
                             navigate(`${path.vault}/${record.address}`);
                             disPatch(handleSetVaultDetail(record));

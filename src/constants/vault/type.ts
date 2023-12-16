@@ -25,3 +25,14 @@ export type HistoricalData = {
         value: string;
     }[];
 };
+
+export const SwapTabs = {
+    deposit: {
+        name: 'Deposit',
+        key: 'deposit',
+    },
+    withdraw: {
+        name: 'Withdraw',
+        key: 'withdraw',
+    },
+};

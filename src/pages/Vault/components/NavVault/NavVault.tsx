@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DocsIcon from 'src/assets/svg/DocsIcon';
 import HomeIcon from 'src/assets/svg/HomeIcon';
 import path from 'src/constants/path';
@@ -19,7 +19,7 @@ interface Props {
 
 const NavVault = ({ isResponsive, currentAddress, handleLogout, onOpenModalSelect }: Props) => {
     // const { open: openSelect, onCloseModal: onCloseSelectModal, onOpenModal: onOpenModalSelect } = useModal();
-
+    const { vaultId } = useParams();
     const listVariants: Variants = {
         open: {
             opacity: 1,
@@ -38,7 +38,7 @@ const NavVault = ({ isResponsive, currentAddress, handleLogout, onOpenModalSelec
     const menuList = [
         {
             text: 'Home',
-            isActive: true,
+            isActive: vaultId === undefined,
             link: path.vault,
             key: 'home',
             icon: <HomeIcon />,
@@ -104,12 +104,12 @@ const NavVault = ({ isResponsive, currentAddress, handleLogout, onOpenModalSelec
                                 duration: 0.05,
                             }}
                             key={item.key}
-                            className={`py-[14px] cursor-pointer group px-[16px] flex items-center rounded-2xl my-5 ${
+                            className={` cursor-pointer group px-[16px] flex items-center rounded-2xl my-5 ${
                                 item.isActive && !isResponsive && 'bg-background_2'
                             }`}
                         >
                             {item.icon}
-                            <Link to={item.link} key={item.key} target={item.target} className="ml-3">
+                            <Link to={item.link} key={item.key} target={item.target} className="ml-3 py-[14px] w-full">
                                 <span
                                     className={`text-base font-bold ${
                                         !item.isActive

@@ -5,6 +5,7 @@ import './styles/base.css';
 import './styles/component.css';
 import './styles/Modal.css';
 import './styles/table.css';
+import './styles/tabs.css';
 import './styles/responsive.css';
 import App from 'src/App';
 import { ConfigProvider } from 'antd';
