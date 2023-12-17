@@ -1,6 +1,5 @@
 import logoNestQuant from 'src/assets/images/vault/logo_icon.png';
 import Button from 'src/components/Button';
-import InputNumber from 'src/components/InputNumber';
 
 const WithDraw = () => {
     return (
@@ -22,7 +21,6 @@ const WithDraw = () => {
                             </div>
                         </div>
                     </div>
-                    <InputNumber />
                 </div>
                 <div>
                     <Button extendsClassName="block w-full font-semibold text-white text-[16px] hover:opacity-80 transition-all duration-300">

@@ -1,24 +1,26 @@
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import NoteIcon from 'src/assets/svg/NoteIcon';
 import Button from 'src/components/Button';
-import InputNumber from 'src/components/InputNumber';
+import Input from 'src/components/Input';
 import { RootState } from 'src/store';
 import { formatCurrency } from 'src/utils';
+import { Schema, schema } from 'src/utils/Rules';
+
+type FormData = Pick<Schema, 'deposit'>;
+const registerSchema = schema.pick(['deposit']);
+
 const Deposit = () => {
     const vaultDetail = useSelector((state: RootState) => state.vaultStore.detailVault);
     const {
         handleSubmit,
-        control,
         register,
-        trigger,
         formState: { errors },
-        setValue,
-        watch,
-    } = useForm();
+    } = useForm<FormData>({
+        resolver: yupResolver(registerSchema),
+    });
 
-    console.log(watch('deposit'));
     const onSubmit = handleSubmit((data) => {
         console.log(data);
     });
@@ -53,29 +55,16 @@ const Deposit = () => {
                     </div>
                     <div className="relative">
                         <form onSubmit={onSubmit}>
-                            <Controller
-                                control={control}
-                                name="price_min"
-                                render={({ field }) => {
-                                    return (
-                                        <InputNumber
-                                            type="text"
-                                            className="grow"
-                                            placeholder="₫ TỪ"
-                                            classNameInput="p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-                                            onChange={(event) => {
-                                                field.onChange(event);
-                                                trigger('price_max');
-                                            }}
-                                            value={field.value}
-                                            classNameError="hidden"
-                                            ref={field.ref}
-                                        />
-                                    );
-                                }}
+                            <Input
+                                register={register}
+                                name="deposit"
+                                placeholder="0"
+                                autoComplete="on"
+                                errorsMessage={errors.deposit?.message}
                             />
                             <button
-                                type="submit"
+                                // type="submit"
+                                onClick={(e) => console.log(123)}
                                 className="absolute top-[50%] translate-y-[-50%] right-4 text-[14px] rounded-2xl text-accent_3 font-semibold bg-transparent"
                             >
                                 Max
