@@ -10,7 +10,7 @@ import {
     handleSetAddress,
     handleSetChain,
 } from 'src/ReducerStore/useAuthenticationStore/useAuthenticationStore';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import useFetchVaultTable from '../vault/useFetchVaultTable';
 import { RootState } from 'src/store';
@@ -31,8 +31,8 @@ export const useConnectWallet = ({ handleFailed, handleSuccess }: Props) => {
 
     const handleConnect = async () => {
         const address = await handleConnectWallet();
-        await changeChainId(currentChain);
         if (address) {
+            await changeChainId(currentChain);
             dispatch(handleSetAddress(address));
             handleSuccess && handleSuccess();
             const { listVault, detailVault } = await handleRetrieve(currentChain, address, vaultId, vaultDetail);

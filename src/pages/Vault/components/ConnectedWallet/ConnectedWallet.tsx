@@ -29,12 +29,9 @@ const ConnectedWallet = ({ isResponsive, onClick, extendsClassName }: Props) => 
                     </button>
                 </div>
             }
-            classNameWrapper="w-full translate-x-[-16px] lg:translate-x-0"
+            classNameWrapper="w-full"
         >
-            <div
-                className={`cursor-pointer mx-4 lg:mx-0 ${extendsClassName}`}
-                onClick={isResponsive ? onClick : undefined}
-            >
+            <div className={`cursor-pointer ${extendsClassName}`} onClick={isResponsive ? onClick : undefined}>
                 <div
                     className={`flex items-center py-1 px-2 bg-neutral_6 rounded-[40px] gap-5 ${
                         isResponsive ? ' justify-between' : ' justify-center'

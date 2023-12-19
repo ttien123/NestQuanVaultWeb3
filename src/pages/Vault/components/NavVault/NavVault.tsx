@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DocsIcon from 'src/assets/svg/DocsIcon';
 import HomeIcon from 'src/assets/svg/HomeIcon';
 import path from 'src/constants/path';
 import { motion, Variants } from 'framer-motion';
 import ConnectWallet from '../ConnectWallet';
+import ConnectButton from 'src/components/ConnectButton';
+import { useConnectWallet } from 'src/hooks/connectWallet/useConnectWallet';
+import { useModal } from 'src/hooks/useModal';
+import ConnectedWallet from '../ConnectedWallet';
 
 interface Props {
     isResponsive?: boolean;
+    currentAddress?: string;
+    handleLogout?: () => void;
+    onOpenModalSelect?: () => void;
 }
 
-const NavVault = ({ isResponsive }: Props) => {
+const NavVault = ({ isResponsive, currentAddress, handleLogout, onOpenModalSelect }: Props) => {
+    // const { open: openSelect, onCloseModal: onCloseSelectModal, onOpenModal: onOpenModalSelect } = useModal();
+    const { vaultId } = useParams();
     const listVariants: Variants = {
         open: {
             opacity: 1,
@@ -29,7 +38,7 @@ const NavVault = ({ isResponsive }: Props) => {
     const menuList = [
         {
             text: 'Home',
-            isActive: true,
+            isActive: vaultId === undefined,
             link: path.vault,
             key: 'home',
             icon: <HomeIcon />,
@@ -61,11 +70,32 @@ const NavVault = ({ isResponsive }: Props) => {
                 }}
                 className={`${
                     isResponsive
-                        ? 'border border-[#29384e] backdrop-blur-[8px] px-0 py-4 lg:p-8 bg-bgMenuVault'
+                        ? 'border border-[#29384e] backdrop-blur-[8px] p-6 lg:px-0 lg:py-4 lg:p-8 bg-bgMenuVault'
                         : '#181F38'
                 }`}
             >
-                {isResponsive && <ConnectWallet isResponsive />}
+                {/* {isResponsive && <ConnectWallet isResponsive />} */}
+                {isResponsive &&
+                    (!currentAddress ? (
+                        <div className="ml-4">
+                            <ConnectButton
+                                onClick={() => {
+                                    onOpenModalSelect && onOpenModalSelect();
+                                }}
+                                isResponsive={isResponsive}
+                            >
+                                Connect Wallet
+                            </ConnectButton>
+                        </div>
+                    ) : (
+                        <ConnectedWallet
+                            onClick={() => {
+                                handleLogout && handleLogout();
+                            }}
+                            extendsClassName={`${isResponsive ? '' : 'hidden lg:block'}`}
+                            isResponsive={isResponsive}
+                        />
+                    ))}
                 {menuList.map((item) => {
                     return (
                         <motion.li
@@ -74,12 +104,12 @@ const NavVault = ({ isResponsive }: Props) => {
                                 duration: 0.05,
                             }}
                             key={item.key}
-                            className={`py-[14px] cursor-pointer group px-[16px] flex items-center rounded-2xl my-5 ${
+                            className={` cursor-pointer group px-[16px] flex items-center rounded-2xl my-5 ${
                                 item.isActive && !isResponsive && 'bg-background_2'
                             }`}
                         >
                             {item.icon}
-                            <Link to={item.link} key={item.key} target={item.target} className="ml-3">
+                            <Link to={item.link} key={item.key} target={item.target} className="ml-3 py-[14px] w-full">
                                 <span
                                     className={`text-base font-bold ${
                                         !item.isActive

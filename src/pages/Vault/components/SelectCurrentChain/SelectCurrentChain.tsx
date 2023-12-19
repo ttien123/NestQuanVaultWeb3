@@ -1,23 +1,19 @@
 import classNames from 'classnames';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ChainType, handleSetChain } from 'src/ReducerStore/useAuthenticationStore/useAuthenticationStore';
 import BSCIcon from 'src/assets/svg/BSCIcon';
 import EtherIcon from 'src/assets/svg/EtherIcon';
 import ModalStep from 'src/components/ModalStep';
 import { MODAL_STEP } from 'src/components/ModalStep/ModalStep';
 import path from 'src/constants/path';
-import { useConnectWallet } from 'src/hooks/connectWallet/useConnectWallet';
 import { useVaultList } from 'src/hooks/vault/useVaultList';
-import { changeChainId } from 'src/services/walletServices/walletServices';
 import { RootState } from 'src/store';
 
 const SelectCurrentChain = () => {
     const disPatch = useDispatch();
     const navigate = useNavigate();
-    const address = useSelector((state: RootState) => state.Authentication.address);
+    const { vaultId } = useParams();
     const currentChain = useSelector((state: RootState) => state.Authentication.currentChain);
     // const { handleConnect } = useConnectWallet({});
 
@@ -27,16 +23,6 @@ const SelectCurrentChain = () => {
         stepEarly: stepData,
         resetModalStep: rest,
     } = useVaultList(currentChain);
-
-    const [content, setContent] = useState('');
-    const [step, setStep] = useState(MODAL_STEP.READY);
-    const handleStatus = (content: string, status: MODAL_STEP) => {
-        setStep(status);
-        setContent(content);
-    };
-    const resetModalStep = () => {
-        setStep(MODAL_STEP.READY);
-    };
 
     const LIST_CHAIN = [
         {
@@ -66,37 +52,6 @@ const SelectCurrentChain = () => {
                         onClick={async () => {
                             disPatch(handleSetChain(e.value));
                             getVaultList(e.value);
-                            // handleStatus('Please confirm the request...', MODAL_STEP.PROCESSING);
-                            // if (address) {
-                            //     const isChangeChain = await changeChainId(e.value);
-                            //     isChangeChain &&
-                            //         toast.success('Success', {
-                            //             autoClose: 1000,
-                            //         });
-
-                            //     !isChangeChain &&
-                            //         toast.error('Fail', {
-                            //             autoClose: 1000,
-                            //         });
-                            // } else {
-                            //     const isConnected = await handleConnect();
-                            //     if (isConnected) {
-                            //         const isChangeChain = await changeChainId(e.value);
-                            //         isChangeChain &&
-                            //             toast.success('Success', {
-                            //                 autoClose: 1000,
-                            //             });
-
-                            //         !isChangeChain &&
-                            //             toast.error('Fail', {
-                            //                 autoClose: 1000,
-                            //             });
-                            //     }
-                            // }
-                            // handleStatus('Retrieving data onchain...', MODAL_STEP.READY);
-                            // handleSetChain(e.value);
-                            // getVaultList(e.value);
-                            // console.log(`current Chain: ${currentChain}`);
                             navigate(path.vault);
                         }}
                     >
@@ -105,22 +60,16 @@ const SelectCurrentChain = () => {
                 );
             })}
 
-            <ModalStep
-                open={step !== MODAL_STEP.READY}
-                step={step}
-                onClose={step !== MODAL_STEP.PROCESSING ? resetModalStep : undefined}
-                showClose={step !== MODAL_STEP.PROCESSING}
-                closable={step !== MODAL_STEP.PROCESSING}
-                content={content}
-            />
-            <ModalStep
-                open={stepData !== MODAL_STEP.READY}
-                step={stepData}
-                onClose={stepData !== MODAL_STEP.PROCESSING ? rest : undefined}
-                showClose={stepData !== MODAL_STEP.PROCESSING}
-                closable={stepData !== MODAL_STEP.PROCESSING}
-                content={contentData}
-            />
+            {vaultId === undefined && (
+                <ModalStep
+                    open={stepData !== MODAL_STEP.READY}
+                    step={stepData}
+                    onClose={stepData !== MODAL_STEP.PROCESSING ? rest : undefined}
+                    showClose={stepData !== MODAL_STEP.PROCESSING}
+                    closable={stepData !== MODAL_STEP.PROCESSING}
+                    content={contentData}
+                />
+            )}
         </>
     );
 };

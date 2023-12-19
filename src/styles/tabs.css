@@ -1,0 +1,49 @@
+.ant-tabs {
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid #212b50;
+    background: #181f38;
+}
+
+.ant-tabs > .ant-tabs-nav,
+.ant-tabs > div > .ant-tabs-nav {
+    margin-bottom: 0;
+}
+
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
+.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
+    width: 100%;
+}
+
+.ant-tabs .ant-tabs-tab {
+    flex: 1;
+    padding: 0;
+}
+.ant-tabs .ant-tabs-tab + .ant-tabs-tab {
+    margin-left: 12px;
+}
+
+.app-tabs .ant-tabs-nav .ant-tabs-tab .ant-tabs-tab-btn {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    color: #5e687c;
+    padding: 12px;
+    width: 100%;
+    text-align: center;
+}
+
+.app-tabs .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #fff;
+}
+
+.ant-tabs-top > .ant-tabs-nav::before,
+.ant-tabs-bottom > .ant-tabs-nav::before,
+.ant-tabs-top > div > .ant-tabs-nav::before,
+.ant-tabs-bottom > div > .ant-tabs-nav::before {
+    display: none;
+}
+
+.ant-tabs-nav-operations {
+    display: none !important;
+}

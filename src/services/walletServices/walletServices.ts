@@ -23,7 +23,7 @@ export const handleConnectWallet = async () => {
 
         return accounts[0];
     } catch (error) {
-        console.error(`connect wallet error: ${error}`);
+        // console.error(`connect wallet error: ${error}`);
         return '';
     }
 };
@@ -60,7 +60,6 @@ export const changeChainId = async (currentChain: ChainType) => {
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: currentChain }],
         });
-        return true;
     } catch (switchError: any) {
         if (switchError.code === 4902) {
             try {
@@ -94,7 +93,6 @@ export const changeChainId = async (currentChain: ChainType) => {
                 }
             } catch (addError) {}
         }
-        return false;
     }
 };
 
@@ -143,69 +141,157 @@ export const getStatisticInfoFromContract = async (vaultAdd: string, currentChai
     };
 };
 
-export const getStaked = async (ob: { acc: string; address: string }) => {
+export const getStaked = async (ob: { acc: string; address: string; currentChain: ChainType }) => {
     try {
-        const { ethereum } = window;
+        // const { ethereum } = window;
 
-        if (!ethereum) {
-            // throw new Error('MetaMask is not available.');
-            return;
+        // if (!ethereum) {
+        //   // throw new Error('MetaMask is not available.');
+        //   return;
+        // }
+        // const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+        // console.log(provider)
+
+        let provider: JsonRpcProvider;
+        let controllerAdd: string;
+        let urlLink: string;
+        switch (ob.currentChain) {
+            case ChainType.ETHER:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.ether.rpc[0]);
+                controllerAdd = ChainList.ether.controller;
+                urlLink = import.meta.env.VITE_ETHER_ADDRESS;
+                break;
+
+            case ChainType.BSC:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
+                controllerAdd = ChainList.bsc.controller;
+                urlLink = import.meta.env.VITE_BINANCE_ADDRESS;
+                break;
+
+            default:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
+                controllerAdd = ChainList.bsc.controller;
+                urlLink = import.meta.env.VITE_BINANCE_ADDRESS;
+                break;
         }
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-        const vault = typechain.Vault__factory.connect(ob.address);
-        const staked = (await vault.connect(provider.getSigner() as any).balanceOf(ob.acc)).toString();
-        const decimal = (await vault.connect(provider.getSigner() as any).decimals()).toString();
+        const vault = typechain.Vault__factory.connect(ob.address, provider as any);
+        // const signer = provider.getSigner() as any;
+        // const address = await signer.getAddress();
+        // console.log('address: ', address);
+        // console.log('signer: ', await signer);
+        const staked = (await vault.balanceOf(ob.acc)).toString();
+        const decimal = (await vault.decimals()).toString();
         const stakedAmount = new BigNumber(staked.toString())
             .dividedBy(new BigNumber(10).pow(new BigNumber(decimal)))
             .toString();
         return stakedAmount;
     } catch (error) {
-        console.error(`get stake error: ${error}`);
+        // console.error(`get stake error: ${error}`);
+        return '0';
     }
 };
 
-export const getUSDTBalance = async (ob: { acc: string; address: string }) => {
+export const getUSDTBalance = async (ob: { acc: string; address: string; currentChain: ChainType }) => {
     try {
-        const { ethereum } = window;
+        // const { ethereum } = window;
 
-        if (!ethereum) {
-            // throw new Error('MetaMask is not available.');
-            return;
+        // if (!ethereum) {
+        //   // throw new Error('MetaMask is not available.');
+        //   return '0';
+        // }
+
+        // if (!ethereum.isConnected()) {
+        //   return '0';
+        // }
+
+        let provider: JsonRpcProvider;
+        let controllerAdd: string;
+        let urlLink: string;
+        switch (ob.currentChain) {
+            case ChainType.ETHER:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.ether.rpc[0]);
+                controllerAdd = ChainList.ether.controller;
+                urlLink = import.meta.env.VITE_ETHER_ADDRESS;
+                break;
+
+            case ChainType.BSC:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
+                controllerAdd = ChainList.bsc.controller;
+                urlLink = import.meta.env.VITE_BINANCE_ADDRESS;
+                break;
+
+            default:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
+                controllerAdd = ChainList.bsc.controller;
+                urlLink = import.meta.env.VITE_BINANCE_ADDRESS;
+                break;
         }
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-        const signer = provider.getSigner() as any;
-        const vault = typechain.Vault__factory.connect(ob.address);
-        const decimals = (await vault.connect(signer).decimals()).toString();
-        const underlyingAddress = await vault.connect(signer).underlying();
-        const underlying = typechain.MockUnderlyingToken__factory.connect(underlyingAddress);
-        const underlyingBalance = (await underlying.connect(signer).balanceOf(ob.acc)).toString();
+        // const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+        // const signer = provider.getSigner() as any;
+        // const address = await signer.getAddress();
+        // console.log('address: ', address);
+
+        const vault = typechain.Vault__factory.connect(ob.address, provider as any);
+        const decimals = (await vault.decimals()).toString();
+        const underlyingAddress = await vault.underlying();
+        const underlying = typechain.MockUnderlyingToken__factory.connect(underlyingAddress, provider as any);
+        const underlyingBalance = (await underlying.balanceOf(ob.acc)).toString();
 
         const usdtBalance = new BigNumber(underlyingBalance)
             .dividedBy(new BigNumber(10).pow(new BigNumber(decimals)))
             .toString();
+
         return usdtBalance;
     } catch (error) {
-        console.error(`get stake error: ${error}`);
+        // console.error(`get stake error: ${error}`);
+        return '0';
     }
 };
 
-export const getDepositWithdrawPendingAmount = async (ob: { acc: string; address: string }) => {
+export const getDepositWithdrawPendingAmount = async (ob: {
+    acc: string;
+    address: string;
+    currentChain: ChainType;
+}) => {
     try {
-        const { ethereum } = window;
+        // const { ethereum } = window;
 
-        if (!ethereum) {
-            // throw new Error('MetaMask is not available.');
-            return;
+        // if (!ethereum) {
+        //   // throw new Error('MetaMask is not available.');
+        //   return;
+        // }
+
+        let provider: JsonRpcProvider;
+        let controllerAdd: string;
+        let urlLink: string;
+        switch (ob.currentChain) {
+            case ChainType.ETHER:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.ether.rpc[0]);
+                controllerAdd = ChainList.ether.controller;
+                urlLink = import.meta.env.VITE_ETHER_ADDRESS;
+                break;
+
+            case ChainType.BSC:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
+                controllerAdd = ChainList.bsc.controller;
+                urlLink = import.meta.env.VITE_BINANCE_ADDRESS;
+                break;
+
+            default:
+                provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
+                controllerAdd = ChainList.bsc.controller;
+                urlLink = import.meta.env.VITE_BINANCE_ADDRESS;
+                break;
         }
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-        const signer = provider.getSigner() as any;
-        const vault = typechain.Vault__factory.connect(ob.address);
-        const decimals = (await vault.connect(signer).decimals()).toString();
-        const depositOrder = (await vault.connect(signer).depositOrder(signer)).toString();
-        const withdrawOrder = (await vault.connect(signer).withdrawOrder(signer)).toString();
+        // const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+        // const signer = provider.getSigner() as any;
+        const vault = typechain.Vault__factory.connect(ob.address, provider as any);
+        const decimals = (await vault.decimals()).toString();
+        const depositOrder = (await vault.depositOrder(ob.acc)).toString();
+        const withdrawOrder = (await vault.withdrawOrder(ob.acc)).toString();
 
         const depositFmt = new BigNumber(depositOrder)
             .dividedBy(new BigNumber(10).pow(new BigNumber(decimals)))
@@ -213,12 +299,11 @@ export const getDepositWithdrawPendingAmount = async (ob: { acc: string; address
         const withdrawFmt = new BigNumber(withdrawOrder)
             .dividedBy(new BigNumber(10).pow(new BigNumber(decimals)))
             .toString();
-        console.log('depositFmt: ', depositFmt);
-        console.log('withdrawFmt: ', withdrawFmt);
 
         return { depositFmt, withdrawFmt };
     } catch (error) {
-        console.error(`get stake error: ${error}`);
+        // console.error(`get stake error: ${error}`);
+        return { depositFmt: '0', withdrawFmt: '0' };
     }
 };
 
@@ -244,9 +329,9 @@ export const getListVaultFromContract = async (
             break;
 
         default:
-            provider = new ethers.providers.JsonRpcProvider(ChainList.ether.rpc[0]);
-            controllerAdd = ChainList.ether.controller;
-            urlLink = import.meta.env.VITE_ETHER_ADDRESS;
+            provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
+            controllerAdd = ChainList.bsc.controller;
+            urlLink = import.meta.env.VITE_BINANCE_ADDRESS;
             break;
     }
 
@@ -269,7 +354,7 @@ export const getListVaultFromContract = async (
                 // const currencyPair = name.split("/")[0];
                 let balance: any = '0';
                 if (account) {
-                    balance = await getStaked({ acc: account, address: e.toString() });
+                    balance = await getStaked({ acc: account, address: e.toString(), currentChain: currentChain });
                     // console.log(balance);
 
                     balance = new BigNumber(balance).multipliedBy(oneSharePrice).toString();
@@ -381,7 +466,7 @@ export const getHistoricalData = async (
             break;
 
         default:
-            provider = new ethers.providers.JsonRpcProvider(ChainList.ether.rpc[0]);
+            provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
             break;
     }
     // console.log(`provider ${provider}`);
@@ -460,7 +545,7 @@ export const getStatisticInfo = async (vaultAdd: string, currentChain: ChainType
             break;
 
         default:
-            provider = new ethers.providers.JsonRpcProvider(ChainList.ether.rpc[0]);
+            provider = new ethers.providers.JsonRpcProvider(ChainList.bsc.rpc[0]);
             break;
     }
     if (window.ethereum) {
@@ -480,7 +565,7 @@ export const getStatisticInfo = async (vaultAdd: string, currentChain: ChainType
         .toString();
     let balance: any = '0';
     if (account != '') {
-        balance = await getStaked({ acc: account, address: vaultAdd });
+        balance = await getStaked({ acc: account, address: vaultAdd, currentChain: currentChain });
         // console.log(balance);
 
         balance = new BigNumber(balance).multipliedBy(fmtOneSharePrice).toString();

@@ -30,10 +30,36 @@ export const vaultStoreSlice = createSlice({
         handleSetListVault: (state, action: PayloadAction<VaultDetailDTO[]>) => {
             state.listVault = action.payload;
         },
+        handleSetVaultDetail: (state, action: PayloadAction<VaultDetailDTO | null>) => {
+            state.detailVault = action.payload;
+        },
+        handleSetHistoricalData: (state, action: PayloadAction<HistoricalData>) => {
+            state.historicalVaultData = action.payload;
+        },
+        handleSetUSDTBalance: (state, action: PayloadAction<string>) => {
+            state.usdt = action.payload;
+        },
+        handleSetStakedAmount: (state, action: PayloadAction<string>) => {
+            state.staked = action.payload;
+        },
+        handleSetDepositOrder: (state, action: PayloadAction<string>) => {
+            state.depositOrder = action.payload;
+        },
+        handleSetWithdrawOrder: (state, action: PayloadAction<string>) => {
+            state.withdrawOrder = action.payload;
+        },
     },
 });
 
-export const { handleSetListVault } = vaultStoreSlice.actions;
+export const {
+    handleSetListVault,
+    handleSetVaultDetail,
+    handleSetHistoricalData,
+    handleSetDepositOrder,
+    handleSetStakedAmount,
+    handleSetUSDTBalance,
+    handleSetWithdrawOrder,
+} = vaultStoreSlice.actions;
 const vaultStoreReducer = vaultStoreSlice.reducer;
 
 export default vaultStoreReducer;

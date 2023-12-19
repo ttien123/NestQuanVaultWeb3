@@ -24,7 +24,7 @@ export const TOKEN_LIST: Record<string, { key: string; img: string }> = {
         key: 'MUSDT',
         img: usdtImg,
     },
-    BTCB: {
+    BTC: {
         key: 'BTC',
         img: btcImg,
     },

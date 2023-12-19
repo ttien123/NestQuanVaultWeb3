@@ -43,7 +43,7 @@ const AppModal: FC<
             getContainer={() => document.getElementById('root') as HTMLElement}
         >
             <Fragment>
-                {showCloseIcon && <CloseIcon onClick={onClose} className={classNameIconClose} />}
+                {/* {showCloseIcon && <CloseIcon onClick={onClose} className={classNameIconClose} />} */}
                 <>
                     <Title level={2} className={classNameTitle}>
                         {title}
