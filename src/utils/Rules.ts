@@ -3,10 +3,32 @@ import * as yup from 'yup';
 export const schema = yup.object({
     deposit: yup
         .string()
-        .required('email là bắt buộc')
-        .email('Email không đúng định dạng')
-        .min(1, 'Độ dài từ 5 - 160 ký tự')
-        .max(160, 'Độ dài từ 5 - 160 ký tự'),
+        .required('Amount is required')
+        .test({
+            name: 'value-not-allow',
+            message: 'Amount must be at least 1 usdt',
+            test: function (value) {
+                if (Number(value) >= 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+        }),
+
+    withdraw: yup
+        .string()
+        .required('Amount is required')
+        .test({
+            name: 'value-not-allow',
+            message: 'Amount must be at least 0 usdt',
+            test: function (value) {
+                if (Number(value) > 0) {
+                    return true;
+                }
+                return false;
+            },
+        }),
 });
 
 export type Schema = yup.InferType<typeof schema>;

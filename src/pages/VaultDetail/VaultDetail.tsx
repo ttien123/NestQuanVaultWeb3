@@ -15,7 +15,6 @@ const VaultDetail = () => {
     const { vaultId = '' } = useParams();
     const { vault } = vaultDetail || {};
     const { content, step, handleRetrieve, resetModalStep } = useFetchHistoryData();
-    // console.log(vaultDetail);
 
     useEffect(() => {
         handleRetrieve(vaultId, currentChain);
@@ -24,10 +23,10 @@ const VaultDetail = () => {
     return (
         <div className="h-[5000px] pt-[30px]">
             <div className="grid grid-cols-8 gap-4">
-                <div className="col-span-8 lg:col-span-5 h-[500px]">
+                <div className="col-span-8 lg:col-span-5 h-[500px] order-2 lg:order-1">
                     <InfoVaultDetail />
                 </div>
-                <div className="col-span-8 lg:col-span-3  h-[500px]">
+                <div className="col-span-8 lg:col-span-3  h-[500px] order-1 lg:order-2">
                     <HandleMoney />
                 </div>
             </div>

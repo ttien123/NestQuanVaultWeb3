@@ -23,6 +23,7 @@ const Button = ({
 
     return (
         <button
+            type="button"
             className={
                 isNormal
                     ? newClassName + 'bg-[#2F4C78] hover:bg-primary_1'

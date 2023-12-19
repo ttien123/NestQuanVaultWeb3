@@ -1,7 +1,41 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import logoNestQuant from 'src/assets/images/vault/logo_icon.png';
 import Button from 'src/components/Button';
+import InputNumber from 'src/components/InputNumber';
+import { Schema, schema } from 'src/utils/Rules';
+
+type FormData = Pick<Schema, 'withdraw'>;
+const registerSchema = schema.pick(['withdraw']);
 
 const WithDraw = () => {
+    const [localValue, setLocalValue] = useState<string>('');
+
+    const methods = useForm<FormData>({
+        resolver: yupResolver(registerSchema),
+    });
+
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = methods;
+
+    const onSubmit = handleSubmit((data) => {
+        // const deposit = data.deposit.replace(/^0+/g, '');
+        const { withdraw } = data;
+        setLocalValue(Number(withdraw).toLocaleString());
+        console.log(data);
+
+        // if (deposit.slice(deposit.length - 1) === '.') {
+        //     // setNewLocalValue(`${formattedNumber}.`);
+        //     // console.log(`${formattedNumber}.`);
+        //     setValue('deposit', deposit.split('.')?.[0]);
+        // }
+
+        // console.log(quantity);
+    });
     return (
         <div className="pt-6">
             <div className="flex flex-col gap-4">
@@ -21,11 +55,43 @@ const WithDraw = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <Button extendsClassName="block w-full font-semibold text-white text-[16px] hover:opacity-80 transition-all duration-300">
-                        WithDraw
-                    </Button>
+                    <FormProvider {...methods}>
+                        <form onSubmit={onSubmit}>
+                            <div className="relative">
+                                <Controller
+                                    control={control}
+                                    name="withdraw"
+                                    render={({ field }) => {
+                                        return (
+                                            <InputNumber
+                                                type="text"
+                                                name="withdraw"
+                                                placeholder="0"
+                                                setLocalValue={setLocalValue}
+                                                localValue={localValue}
+                                                onChange={field.onChange}
+                                                value={field.value}
+                                                ref={field.ref}
+                                                errorsMessage={errors.withdraw?.message}
+                                            />
+                                        );
+                                    }}
+                                />
+
+                                <button className="absolute top-[50%] translate-y-[-50%] right-4 text-[14px] rounded-2xl text-accent_3 font-semibold bg-transparent">
+                                    Max
+                                </button>
+                            </div>
+                            <div className="mt-4">
+                                <Button
+                                    type="submit"
+                                    extendsClassName="block w-full font-semibold text-white text-[16px] hover:opacity-80 transition-all duration-300"
+                                >
+                                    WithDraw
+                                </Button>
+                            </div>
+                        </form>
+                    </FormProvider>
                 </div>
             </div>
         </div>
