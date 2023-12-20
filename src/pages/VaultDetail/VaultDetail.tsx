@@ -26,7 +26,7 @@ const VaultDetail = () => {
                 <div className="col-span-8 lg:col-span-5 h-[500px] order-2 lg:order-1">
                     <InfoVaultDetail />
                 </div>
-                <div className="col-span-8 lg:col-span-3  h-[500px] order-1 lg:order-2">
+                <div className="col-span-8 lg:col-span-3 order-1 lg:order-2">
                     <HandleMoney />
                 </div>
             </div>

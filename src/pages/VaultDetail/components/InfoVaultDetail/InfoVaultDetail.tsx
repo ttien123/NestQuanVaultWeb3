@@ -1,5 +1,11 @@
+import StatisticVault from '../StatisticVault';
+
 const InfoVaultDetail = () => {
-    return <div>InfoVaultDetail</div>;
+    return (
+        <div>
+            <StatisticVault />
+        </div>
+    );
 };
 
 export default InfoVaultDetail;

@@ -21,7 +21,7 @@ export const schema = yup.object({
         .required('Amount is required')
         .test({
             name: 'value-not-allow',
-            message: 'Amount must be at least 0 usdt',
+            message: 'Amount must be greater than 0',
             test: function (value) {
                 if (Number(value) > 0) {
                     return true;

@@ -46,3 +46,41 @@ export const getBlockScanUrl = (chainId: ChainType) => {
             return ChainList.bsc.scan;
     }
 };
+
+export const trimTrailingZero = (value: string) => {
+    return value.replace(/\.0*$|(\.\d*[1-9])0+$/, '$1');
+};
+
+export const convertStatistics = (number: number | string): { value: string; suffix: string; fullValue?: string } => {
+    const value = new BigNumber(number);
+
+    if (!number || value.isLessThan(0))
+        return {
+            value: '0',
+            suffix: '',
+        };
+
+    if (value.isGreaterThan(0) && value.isLessThan(1000))
+        // 0.01
+        return {
+            value: trimTrailingZero(value.toFixed(2).toString()),
+            suffix: '',
+        };
+
+    if (value.isGreaterThanOrEqualTo(1000)) {
+        const suffixes = ['', 'K', 'M', 'B', 'T'];
+        const suffixNum = Math.floor(value.integerValue().toString().length / 3);
+        const shortValue = (suffixNum != 0 ? value.div(Math.pow(1000, suffixNum)) : value).toPrecision(2);
+
+        return {
+            value: shortValue,
+            suffix: suffixes[suffixNum],
+        };
+    }
+
+    return {
+        value: trimTrailingZero(value.toString()),
+        suffix: '',
+        fullValue: value.toString(),
+    };
+};

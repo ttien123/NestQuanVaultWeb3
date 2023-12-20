@@ -31,11 +31,6 @@ const Deposit = () => {
 
     const { open: openSelect, onCloseModal: onCloseSelectModal, onOpenModal: onOpenModalSelect } = useModal();
 
-    const { handleConnect } = useConnectWallet({
-        handleFailed: onCloseSelectModal,
-        handleSuccess: onCloseSelectModal,
-    });
-
     const { getMyUSDTBalanceByVault, getDepositWithdrawOrderByVault } = useVaultDetail(currentChain, vaultAddr);
 
     const { handleDeposit, loading, txHash, step, resetModalStep, content } = useDeposit();
@@ -58,11 +53,14 @@ const Deposit = () => {
     const disabled = !!errors.deposit?.message || isLessThanOrEqualTo(myUsdtBalance, 0) || loading;
 
     const onSubmit = handleSubmit(async (data) => {
-        const { deposit: quantity = '0' } = data;
-        const isLastDot = quantity.slice(quantity.length - 1);
+        const { deposit: value = '0' } = data;
+        const isLastDot = value.slice(value.length - 1);
+        let quantity = '0';
         if (isLastDot === '.') {
-            const newValue = quantity.split('.');
-            setValue('deposit', newValue[0]);
+            quantity = value.split('.')[0];
+            setValue('deposit', quantity);
+        } else {
+            quantity = value;
         }
         await handleDeposit({ amount: quantity, address: vaultAddr }, reset);
         await getMyUSDTBalanceByVault();
