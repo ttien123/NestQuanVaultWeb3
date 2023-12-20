@@ -17,6 +17,7 @@ import { useConnectWallet } from 'src/hooks/connectWallet/useConnectWallet';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/store';
 import SelectCurrentChain from '../SelectCurrentChain';
+import ListWallet from 'src/components/ListWallet';
 
 interface Props {
     isResponsive?: boolean;
@@ -29,38 +30,6 @@ const ConnectWallet = ({ isResponsive }: Props) => {
         handleSuccess: onCloseSelectModal,
     });
     const currentAddress = useSelector((state: RootState) => state.Authentication.address);
-    const LIST_WALLETS = [
-        {
-            name: 'Owallet',
-            icon: <OwalletIcon />,
-            disabled: true,
-        },
-        {
-            name: 'Metamask',
-            icon: <MetamaskIcon />,
-            disabled: false,
-        },
-        {
-            name: 'TronLink',
-            icon: <TronLinkIcon />,
-            disabled: true,
-        },
-        {
-            name: 'Phantom',
-            icon: <PhantomIcon />,
-            disabled: true,
-        },
-        {
-            name: 'Keplr',
-            icon: <KeplrIcon />,
-            disabled: true,
-        },
-        {
-            name: 'Ledger',
-            icon: <LedgeIcon />,
-            disabled: true,
-        },
-    ];
 
     return (
         <div className="flex items-center justify-start lg:justify-center gap-0 lg:gap-2 translate-x-4 lg:translate-x-0">
@@ -100,7 +69,7 @@ const ConnectWallet = ({ isResponsive }: Props) => {
                 </button>
             </Popover>
             {!currentAddress ? (
-                <ConnectButton onClick={handleConnect} isResponsive={isResponsive}>
+                <ConnectButton onClick={onOpenModalSelect} isResponsive={isResponsive}>
                     Connect Wallet
                 </ConnectButton>
             ) : (
@@ -110,7 +79,7 @@ const ConnectWallet = ({ isResponsive }: Props) => {
                     isResponsive={isResponsive}
                 />
             )}
-            <AppModal
+            {/* <AppModal
                 title="Connect wallet"
                 open={openSelect}
                 maskClosable
@@ -149,7 +118,9 @@ const ConnectWallet = ({ isResponsive }: Props) => {
                         I don’t have a wallet?
                     </a>
                 </div>
-            </AppModal>
+            </AppModal> */}
+
+            <ListWallet openSelect={openSelect} onCloseSelectModal={onCloseSelectModal} />
 
             {/* <ModalStep open={isConnecting} step={MODAL_STEP.SUCCESS} showClose={false} closable={false} /> */}
             <ModalStep

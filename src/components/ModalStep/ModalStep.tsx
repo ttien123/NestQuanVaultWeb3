@@ -18,7 +18,7 @@ const SuccessContent: FC<{ content?: string; link: string }> = ({ content, link 
             <div className="logo">
                 <SuccessfulIcon />
             </div>
-            <div className="text-white font-medium">{content || 'Transaction successfully!'}</div>
+            <div className="text-white text-center font-medium">{content || 'Transaction successfully!'}</div>
 
             <div className="flex items-center justify-center">
                 <Link
