@@ -13,7 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { persistor, store } from './store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
+// import { MetaMaskUIProvider } from '@metamask/sdk-react-ui';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
                     <ConfigProvider theme={{ hashed: false }}>
-                        <MetaMaskUIProvider
+                        {/* <MetaMaskUIProvider
                             sdkOptions={{
                                 dappMetadata: {
                                     name: 'NestQuant Vault',
@@ -33,9 +33,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                                 extensionOnly: true,
                                 checkInstallationImmediately: false,
                             }}
-                        >
-                            <App />
-                        </MetaMaskUIProvider>
+                        > */}
+                        <App />
+                        {/* </MetaMaskUIProvider> */}
                     </ConfigProvider>
                 </PersistGate>
             </Provider>
