@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import NoteIcon from 'src/assets/svg/NoteIcon';
 import Button from 'src/components/Button';
 import InputNumber from 'src/components/InputNumber';
+import ListWallet from 'src/components/ListWallet';
 import ModalStep from 'src/components/ModalStep';
 import { MODAL_STEP } from 'src/components/ModalStep/ModalStep';
 import { useConnectWallet } from 'src/hooks/connectWallet/useConnectWallet';
@@ -27,7 +28,9 @@ const Deposit = () => {
     const address = useSelector((state: RootState) => state.Authentication.address);
     const currentChain = useSelector((state: RootState) => state.Authentication.currentChain);
     const vaultAddr = vaultId || vaultDetail?.address || '';
-    const { onCloseModal: onCloseSelectModal } = useModal();
+
+    const { open: openSelect, onCloseModal: onCloseSelectModal, onOpenModal: onOpenModalSelect } = useModal();
+
     const { handleConnect } = useConnectWallet({
         handleFailed: onCloseSelectModal,
         handleSuccess: onCloseSelectModal,
@@ -132,7 +135,7 @@ const Deposit = () => {
                                 ) : (
                                     <Button
                                         extendsClassName="block w-full text-white text-[16px]"
-                                        onClick={handleConnect}
+                                        onClick={onOpenModalSelect}
                                     >
                                         Connect Wallet
                                     </Button>
@@ -141,6 +144,7 @@ const Deposit = () => {
                         </form>
                     </FormProvider>
                 </div>
+                <ListWallet openSelect={openSelect} onCloseSelectModal={onCloseSelectModal} />
             </div>
 
             <ModalStep

@@ -63,14 +63,14 @@ export const useConnectWallet = ({ handleFailed, handleSuccess }: Props) => {
         dispatch(handleRemoveAddress());
     };
 
-    const handleChangeChain = async (chainId: ChainType) => {
-        const address = await handleConnectWalletEarly();
-        const { listVault, detailVault } = await handleRetrieve(chainId, address, vaultId, vaultDetail);
-        dispatch(handleSetListVault(listVault));
-        dispatch(handleSetChain(chainId));
+    // const handleChangeChain = async (chainId: ChainType) => {
+    //     const address = await handleConnectWalletEarly();
+    //     const { listVault, detailVault } = await handleRetrieve(chainId, address, vaultId, vaultDetail);
+    //     dispatch(handleSetListVault(listVault));
+    //     dispatch(handleSetChain(chainId));
 
-        // window.location.reload();
-    };
+    //     // window.location.reload();
+    // };
 
     useEffect(() => {
         const { ethereum } = window;
@@ -78,13 +78,13 @@ export const useConnectWallet = ({ handleFailed, handleSuccess }: Props) => {
             // ethereum.on('connect', handleConnect);
             ethereum.on('accountsChanged', handleConnectEarly);
             // ethereum.on('disconnect', handleLogout);
-            ethereum.on('chainChanged', (chainId: ChainType) => handleChangeChain(chainId));
+            // ethereum.on('chainChanged', (chainId: ChainType) => handleChangeChain(chainId));
             return () => {
                 if (ethereum.removeListener) {
                     // ethereum.removeListener('connect', handleConnectEarly);
                     ethereum.removeListener('accountsChanged', handleConnectEarly);
                     // ethereum.removeListener('disconnect', handleLogout);
-                    ethereum.removeListener('chainChanged', (chainId: ChainType) => handleChangeChain(chainId));
+                    // ethereum.removeListener('chainChanged', (chainId: ChainType) => handleChangeChain(chainId));
                 }
             };
         }
