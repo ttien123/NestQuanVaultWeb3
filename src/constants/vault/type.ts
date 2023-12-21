@@ -36,3 +36,14 @@ export const SwapTabs = {
         key: 'withdraw',
     },
 };
+
+export const VaultInfoTabs = {
+    about: {
+        name: 'About',
+        key: 'about',
+    },
+    historical: {
+        name: 'Historical Data',
+        key: 'historical-data',
+    },
+};
