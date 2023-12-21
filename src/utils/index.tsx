@@ -84,3 +84,10 @@ export const convertStatistics = (number: number | string): { value: string; suf
         fullValue: value.toString(),
     };
 };
+
+export const DEFAULT_SEARCH_DATE_FORMAT = 'DD/MM/YYYY';
+export const DATE_TIME_FORMAT = 'dd-MM-yyyy hh:mm:ss';
+export const DATE_CHART_FORMAT = 'MMM dd, yyyy';
+export const DATE_MONTH_FORMAT = 'M/dd';
+export const DATE_FORMAT = 'dd-MM-yyyy';
+export const TIME_FORMAT = 'hh:mm:ss';

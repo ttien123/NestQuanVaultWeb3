@@ -29,6 +29,7 @@ export default {
                 tournamentDes: '0px 24px 16px -16px rgba(0, 0, 0, 0.05)',
                 btnFinish: '0px 24px 16px -16px rgba(0,0,0,.05)',
                 dropDown: '0px 4px 32px 0px rgba(15, 30, 45, 0.2)',
+                tooltip: '0px 5px 11px 0px rgba(95, 104, 123, 0.12)',
             },
             backgroundImage: {
                 lightBg: 'url(./src/assets/images/vault/bg.png)',
