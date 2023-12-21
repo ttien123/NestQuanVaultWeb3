@@ -12,6 +12,7 @@ import { MODAL_STEP } from 'src/components/ModalStep/ModalStep';
 import { useModal } from 'src/hooks/useModal';
 import { useVaultDetail } from 'src/hooks/vault/useVaultDetail';
 import { useWithdraw } from 'src/hooks/vault/useWithdraw';
+import { changeChainId } from 'src/services/walletServices/walletServices';
 import { RootState } from 'src/store';
 import { formatCurrency, getBlockScanUrl, isLessThanOrEqualTo } from 'src/utils';
 import { Schema, schema } from 'src/utils/Rules';
@@ -54,9 +55,12 @@ const WithDraw = () => {
         } else {
             quantity = value;
         }
-        await handleWithdraw({ amount: quantity, address: vaultAddr }, reset);
-        await getMyStakedByVault();
-        await getDepositWithdrawOrderByVault();
+        const isChain = await changeChainId(currentChain);
+        if (isChain) {
+            await handleWithdraw({ amount: quantity, address: vaultAddr }, reset);
+            await getMyStakedByVault();
+            await getDepositWithdrawOrderByVault();
+        }
     });
     return (
         <div className="pt-6">
