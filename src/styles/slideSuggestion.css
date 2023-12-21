@@ -1,0 +1,26 @@
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after {
+    font-size: 20px;
+    color: white;
+}
+
+.swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after {
+    font-size: 20px;
+    color: white;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #303e58;
+    border-radius: 50%;
+}
+
+.swiper-button-lock {
+    display: none !important;
+}
