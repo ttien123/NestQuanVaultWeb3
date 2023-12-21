@@ -22,7 +22,7 @@ const VaultDetail = () => {
     }, [vaultId]);
 
     return (
-        <div className="h-[5000px] pt-[30px]">
+        <div className="pt-[30px]">
             <div className="grid grid-cols-8 gap-4">
                 <div className="col-span-8 lg:col-span-5 order-2 lg:order-1">
                     <InfoVaultDetail />
