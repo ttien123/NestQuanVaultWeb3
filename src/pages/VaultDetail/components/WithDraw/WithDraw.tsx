@@ -1,9 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import logoNestQuant from 'src/assets/images/vault/logo_icon.png';
 import Button from 'src/components/Button';
 import InputNumber from 'src/components/InputNumber';
+import ListWallet from 'src/components/ListWallet';
+import ModalStep from 'src/components/ModalStep';
+import { MODAL_STEP } from 'src/components/ModalStep/ModalStep';
+import { useModal } from 'src/hooks/useModal';
+import { useVaultDetail } from 'src/hooks/vault/useVaultDetail';
+import { useWithdraw } from 'src/hooks/vault/useWithdraw';
+import { RootState } from 'src/store';
+import { formatCurrency, getBlockScanUrl, isLessThanOrEqualTo } from 'src/utils';
 import { Schema, schema } from 'src/utils/Rules';
 
 type FormData = Pick<Schema, 'withdraw'>;
@@ -11,30 +21,42 @@ const registerSchema = schema.pick(['withdraw']);
 
 const WithDraw = () => {
     const [localValue, setLocalValue] = useState<string>('');
+    const { open: openSelect, onCloseModal: onCloseSelectModal, onOpenModal: onOpenModalSelect } = useModal();
+    const currentChain = useSelector((state: RootState) => state.Authentication.currentChain);
+    const address = useSelector((state: RootState) => state.Authentication.address);
+    const vaultDetail = useSelector((state: RootState) => state.vaultStore.detailVault);
+    const { vaultId } = useParams();
+    const vaultAddr = vaultId || vaultDetail?.address || '';
+    const { handleWithdraw, loading, txHash, step, resetModalStep, content } = useWithdraw();
+    const { getMyStakedByVault, getDepositWithdrawOrderByVault } = useVaultDetail(currentChain, vaultAddr);
+    const myStakedAmount = useSelector((state: RootState) => state.vaultStore.staked);
 
     const methods = useForm<FormData>({
         resolver: yupResolver(registerSchema),
     });
-
     const {
         handleSubmit,
         control,
+        setValue,
+        reset,
         formState: { errors },
     } = methods;
 
-    const onSubmit = handleSubmit((data) => {
-        // const deposit = data.deposit.replace(/^0+/g, '');
-        const { withdraw } = data;
-        setLocalValue(Number(withdraw).toLocaleString());
-        console.log(data);
+    const disabled = !!errors.withdraw?.message || isLessThanOrEqualTo(myStakedAmount, 0) || loading;
 
-        // if (deposit.slice(deposit.length - 1) === '.') {
-        //     // setNewLocalValue(`${formattedNumber}.`);
-        //     // console.log(`${formattedNumber}.`);
-        //     setValue('deposit', deposit.split('.')?.[0]);
-        // }
-
-        // console.log(quantity);
+    const onSubmit = handleSubmit(async (data) => {
+        const { withdraw: value = '0' } = data;
+        let quantity = '0';
+        const isLastDot = value.slice(value.length - 1);
+        if (isLastDot === '.') {
+            quantity = value.split('.')[0];
+            setValue('withdraw', quantity);
+        } else {
+            quantity = value;
+        }
+        await handleWithdraw({ amount: quantity, address: vaultAddr }, reset);
+        await getMyStakedByVault();
+        await getDepositWithdrawOrderByVault();
     });
     return (
         <div className="pt-6">
@@ -49,8 +71,7 @@ const WithDraw = () => {
                                 <img src={logoNestQuant} alt="img" className="block w-[12px] h-[12px]" />
                                 &nbsp;
                                 <span className="text-neutral_1 font-medium text-[12px] ">
-                                    {/* {formatCurrency(myUsdtBalance, 2)} {'USDT'} */}
-                                    0.00 USDT
+                                    {formatCurrency(myStakedAmount, 2)} {'USDT'}
                                 </span>
                             </div>
                         </div>
@@ -70,6 +91,7 @@ const WithDraw = () => {
                                                 setLocalValue={setLocalValue}
                                                 localValue={localValue}
                                                 onChange={field.onChange}
+                                                myMoney={myStakedAmount}
                                                 value={field.value}
                                                 ref={field.ref}
                                                 errorsMessage={errors.withdraw?.message}
@@ -77,22 +99,38 @@ const WithDraw = () => {
                                         );
                                     }}
                                 />
-
-                                <button className="absolute top-[50%] translate-y-[-50%] right-4 text-[14px] rounded-2xl text-accent_3 font-semibold bg-transparent">
-                                    Max
-                                </button>
                             </div>
                             <div className="mt-4">
-                                <Button
-                                    type="submit"
-                                    extendsClassName="block w-full font-semibold text-white text-[16px] hover:opacity-80 transition-all duration-300"
-                                >
-                                    WithDraw
-                                </Button>
+                                {address ? (
+                                    <Button
+                                        type="submit"
+                                        disabled={disabled}
+                                        extendsClassName="block cursor-pointer w-full font-semibold text-white text-[16px] hover:opacity-80 transition-all duration-300"
+                                    >
+                                        WithDraw
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        extendsClassName="block w-full text-white text-[16px]"
+                                        onClick={onOpenModalSelect}
+                                    >
+                                        Connect Wallet
+                                    </Button>
+                                )}
                             </div>
                         </form>
                     </FormProvider>
+                    <ListWallet openSelect={openSelect} onCloseSelectModal={onCloseSelectModal} />
                 </div>
+                <ModalStep
+                    open={step !== MODAL_STEP.READY}
+                    link={`${getBlockScanUrl(currentChain)}/${txHash}`}
+                    step={step}
+                    onClose={step !== MODAL_STEP.PROCESSING ? resetModalStep : undefined}
+                    showClose={step !== MODAL_STEP.PROCESSING}
+                    closable={step !== MODAL_STEP.PROCESSING}
+                    content={content}
+                />
             </div>
         </div>
     );

@@ -7,6 +7,7 @@ import ModalStep from 'src/components/ModalStep';
 import { MODAL_STEP } from 'src/components/ModalStep/ModalStep';
 import InfoVaultDetail from './components/InfoVaultDetail';
 import HandleMoney from './components/HandleMoney';
+import Suggestion from './components/Suggestion';
 // import HandleMoney from './components/HandleMoney';
 
 const VaultDetail = () => {
@@ -23,13 +24,14 @@ const VaultDetail = () => {
     return (
         <div className="h-[5000px] pt-[30px]">
             <div className="grid grid-cols-8 gap-4">
-                <div className="col-span-8 lg:col-span-5 h-[500px] order-2 lg:order-1">
+                <div className="col-span-8 lg:col-span-5 order-2 lg:order-1">
                     <InfoVaultDetail />
                 </div>
-                <div className="col-span-8 lg:col-span-3  h-[500px] order-1 lg:order-2">
+                <div className="col-span-8 lg:col-span-3 order-1 lg:order-2">
                     <HandleMoney />
                 </div>
             </div>
+            <Suggestion />
             <ModalStep
                 open={step !== MODAL_STEP.READY}
                 step={step}

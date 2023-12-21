@@ -20,7 +20,7 @@ const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function Inpu
         localValue,
         setLocalValue,
         value = '',
-        myMoney,
+        myMoney = '0',
         name,
         ...rest
     },
@@ -110,6 +110,7 @@ const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function Inpu
     const handleSetMaxDeposit = () => {
         setValue(name, myMoney);
         setLocalValue(Number(myMoney).toLocaleString());
+        setPrevValue(Number(myMoney).toLocaleString());
     };
     return (
         <div className={className}>

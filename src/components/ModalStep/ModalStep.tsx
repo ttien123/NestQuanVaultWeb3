@@ -39,7 +39,7 @@ const FailedContent: FC<{ content?: string }> = ({ content }) => {
             <div className="logo">
                 <FailedIcon />
             </div>
-            <div className="text-white font-medium">{content || 'Transaction failed!'}</div>
+            <div className="text-white text-center font-medium">{content || 'Transaction failed!'}</div>
         </div>
     );
 };
@@ -50,7 +50,7 @@ const ProcessingContent: FC<{ content?: string }> = ({ content }) => {
             <div className="logo">
                 <ProcessingIcon />
             </div>
-            <div className="text-white font-medium">{content || 'Transaction processing...'}</div>
+            <div className="text-white text-center font-medium">{content || 'Transaction processing...'}</div>
         </div>
     );
 };

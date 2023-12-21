@@ -60,6 +60,7 @@ export const changeChainId = async (currentChain: ChainType) => {
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: currentChain }],
         });
+        return true;
     } catch (switchError: any) {
         if (switchError.code === 4902) {
             try {
@@ -93,6 +94,7 @@ export const changeChainId = async (currentChain: ChainType) => {
                 }
             } catch (addError) {}
         }
+        return false;
     }
 };
 

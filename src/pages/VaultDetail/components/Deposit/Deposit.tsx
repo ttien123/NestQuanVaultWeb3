@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import NoteIcon from 'src/assets/svg/NoteIcon';
 import Button from 'src/components/Button';
 import InputNumber from 'src/components/InputNumber';
@@ -13,6 +14,7 @@ import { useConnectWallet } from 'src/hooks/connectWallet/useConnectWallet';
 import { useModal } from 'src/hooks/useModal';
 import { useDeposit } from 'src/hooks/vault/useDeposit';
 import { useVaultDetail } from 'src/hooks/vault/useVaultDetail';
+import { changeChainId } from 'src/services/walletServices/walletServices';
 import { RootState } from 'src/store';
 import { formatCurrency, getBlockScanUrl, isLessThanOrEqualTo } from 'src/utils';
 import { Schema, schema } from 'src/utils/Rules';
@@ -30,11 +32,6 @@ const Deposit = () => {
     const vaultAddr = vaultId || vaultDetail?.address || '';
 
     const { open: openSelect, onCloseModal: onCloseSelectModal, onOpenModal: onOpenModalSelect } = useModal();
-
-    const { handleConnect } = useConnectWallet({
-        handleFailed: onCloseSelectModal,
-        handleSuccess: onCloseSelectModal,
-    });
 
     const { getMyUSDTBalanceByVault, getDepositWithdrawOrderByVault } = useVaultDetail(currentChain, vaultAddr);
 
@@ -58,15 +55,21 @@ const Deposit = () => {
     const disabled = !!errors.deposit?.message || isLessThanOrEqualTo(myUsdtBalance, 0) || loading;
 
     const onSubmit = handleSubmit(async (data) => {
-        const { deposit: quantity = '0' } = data;
-        const isLastDot = quantity.slice(quantity.length - 1);
+        const { deposit: value = '0' } = data;
+        const isLastDot = value.slice(value.length - 1);
+        let quantity = '0';
         if (isLastDot === '.') {
-            const newValue = quantity.split('.');
-            setValue('deposit', newValue[0]);
+            quantity = value.split('.')[0];
+            setValue('deposit', quantity);
+        } else {
+            quantity = value;
         }
-        await handleDeposit({ amount: quantity, address: vaultAddr }, reset);
-        await getMyUSDTBalanceByVault();
-        await getDepositWithdrawOrderByVault();
+        const isChain = await changeChainId(currentChain);
+        if (isChain) {
+            await handleDeposit({ amount: quantity, address: vaultAddr }, reset);
+            await getMyUSDTBalanceByVault();
+            await getDepositWithdrawOrderByVault();
+        }
     });
 
     return (
