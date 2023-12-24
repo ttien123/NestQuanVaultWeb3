@@ -1,5 +1,6 @@
 import logo from 'src/assets/images/general/logo.png';
 import Button from '../Button';
+import path from 'src/constants/path';
 
 const FooterMain = () => {
     return (
@@ -130,7 +131,9 @@ const FooterMain = () => {
                                 </div>
                             </div>
                             <div className="flex mt-[20px]">
-                                <Button extendsClassName="w-full">Sign up now</Button>
+                                <Button to={path.signUp} extendsClassName="w-full">
+                                    Sign up now
+                                </Button>
                             </div>
                         </div>
                     </div>
