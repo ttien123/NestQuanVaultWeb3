@@ -1,5 +1,7 @@
 const path = {
     home: '/',
+    signUp: '/signup',
+    signIn: '/signIn',
     vault: '/vault',
     vaultDetail: '/vault/:vaultId',
     dataPage: '/dataPage',

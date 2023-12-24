@@ -23,6 +23,7 @@ export default {
                 accent_5: '#313C65',
                 semantic_1: '#ff7373',
                 bgMenuVault: 'rgb(13, 18, 35)',
+                CheckboxColor: 'linear-gradient(96.06deg, rgb(82, 106, 234) 4.1%, rgb(176, 174, 255) 146.32%)',
             },
             boxShadow: {
                 rectangle: '0 0 20px 0 rgba(194, 63, 255, 0.25)',

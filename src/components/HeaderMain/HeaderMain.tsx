@@ -75,8 +75,12 @@ const HeaderMain = () => {
                 <div className="flex items-centerp">
                     <Navbar />
                     <div className="flex !flex-1 ml-4 lg:ml-[24px] flex-shrink-0 items-center">
-                        <Button isNormal>Sign in</Button>
-                        <Button extendsClassName="ml-2 lg:ml-4">Sign up</Button>
+                        <Link to={path.signIn}>
+                            <Button isNormal>Sign in</Button>
+                        </Link>
+                        <Link to={path.signUp}>
+                            <Button extendsClassName="ml-2 lg:ml-4">Sign up</Button>
+                        </Link>
                     </div>
                 </div>
             </div>
